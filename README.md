@@ -8,16 +8,16 @@ En este curso se vera desde cero como construir una aplicación móvil con Flutt
 En esta sección veremos una introducción breve del lenguaje de programación dart
 
 * Básico, nociones básicas del lenguaje
-    * [Inicial]()
-    * [Variables]()
-    * [Operadores]()
-    * [Funciones]()
+    * [Inicial](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/inicial.dart)
+    * [Variables](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/variables.dart)
+    * [Operadores](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/operadores.dart)
+    * [Funciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/funciones.dart)
 * Específico, pequeña profundización de conceptos
-    * [Colecciones]()
-    * [Excepciones]()
-    * [Funciones de alto orden]()
+    * [Colecciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/colecciones.dart)
+    * [Excepciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/excepciones.dart)
+    * [Funciones de alto orden](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/funciones_alto_orden.dart)
 * POO (recomendado profundizar por cuenta propia)
-    * [General Objetos]()
+    * [General Objetos](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/POO.dart)
 
 ## Uso
 
