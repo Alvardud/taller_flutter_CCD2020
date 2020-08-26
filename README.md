@@ -1,16 +1,34 @@
-# taller_flutter_ccd2020
+# Taller Flutter CCD 2020
+Curso online de flutter **#quedateencasa**
 
-A new Flutter application.
+En este curso se vera desde cero como construir una aplicación móvil con Flutter
 
-## Getting Started
+[Curso en la plataforma del CCD](https://ccd-simple.web.app/cursos/aDtjo71hQh25YqmNDaHy)
 
-This project is a starting point for a Flutter application.
+## Dart ejemplos
 
-A few resources to get you started if this is your first Flutter project:
+En esta sección veremos una introducción breve del lenguaje de programación dart
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+* Básico, nociones básicas del lenguaje
+    * [Inicial](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/inicial.dart)
+    * [Variables](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/variables.dart)
+    * [Operadores](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/operadores.dart)
+    * [Funciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/funciones.dart)
+* Específico, pequeña profundización de conceptos
+    * [Colecciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/colecciones.dart)
+    * [Excepciones](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/excepciones.dart)
+    * [Funciones de alto orden](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/funciones_alto_orden.dart)
+* POO (recomendado profundizar por cuenta propia)
+    * [General Objetos](https://github.com/Alvardud/taller_flutter_CCD2020/blob/dart-ejemplos/lib/dart_basico/POO.dart)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Introduccion a Flutter
+
+* [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/introduccion)
+* [Video](https://www.youtube.com/watch?v=cY65T8_2Vk4&t=1s)
+
+## Uso
+
+Para utilizar y/o probar dichos programas, se puede optar por dos vías, utilizar una herramienta en la web o hacerlo en nuestros propios ordenadores
+
+* [Via web, mediante DartPad](https://dartpad.dev/) **Metodo recomendado**, simplemente es copiar y pegar en la interfaz web
+* [Ordenador Personal](https://dart.dev/tutorials/server/cmdline) **Metodo no recomendado**, instalar dart e inicializar un programa de consola
