@@ -23,6 +23,8 @@ En esta sección veremos una introducción breve del lenguaje de programación d
 
 ## Introduccion a Flutter
 
+Breve introducción al framework Flutter
+
 * [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/introduccion)
 * [Video](https://www.youtube.com/watch?v=cY65T8_2Vk4&t=1s)
 
