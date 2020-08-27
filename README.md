@@ -1,7 +1,9 @@
 # Taller Flutter CCD 2020
 Curso online de flutter **#quedateencasa**
 
-En este curso se vera desde cero como construir una aplicación móvil con Flutter
+En este taller se desarrollara desde cero como construir una aplicación móvil con Flutter, dicha aplicacion sera un digitalizador de firmas la cual utiliza procesamiento de imagenes mediante la libreria de open CV
+
+![](images_readme/design.png)
 
 [Curso en la plataforma del CCD](https://ccd-simple.web.app/cursos/aDtjo71hQh25YqmNDaHy)
 
