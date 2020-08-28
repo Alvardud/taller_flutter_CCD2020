@@ -30,9 +30,10 @@ Breve introducción al framework Flutter
 * [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/introduccion)
 * [Video](https://www.youtube.com/watch?v=cY65T8_2Vk4&t=1s)
 
-## Uso
+## Desarrollo de interfaces parte 1
 
-Para utilizar y/o probar dichos programas, se puede optar por dos vías, utilizar una herramienta en la web o hacerlo en nuestros propios ordenadores
+En esta seccion desarrollaremos las interfaces de algunas pantallas de nuestra aplicacion
 
-* [Via web, mediante DartPad](https://dartpad.dev/) **Metodo recomendado**, simplemente es copiar y pegar en la interfaz web
-* [Ordenador Personal](https://dart.dev/tutorials/server/cmdline) **Metodo no recomendado**, instalar dart e inicializar un programa de consola
+* [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/desarrollo_interfaces)
+* [Video]()
+
