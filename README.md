@@ -35,5 +35,5 @@ Breve introducción al framework Flutter
 En esta seccion desarrollaremos las interfaces de algunas pantallas de nuestra aplicacion
 
 * [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/desarrollo_interfaces)
-* [Video]()
+* [Video](https://www.youtube.com/watch?v=1OMqdCEwdOg)
 
