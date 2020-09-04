@@ -44,7 +44,7 @@ En esta seccion desarrollaremos las interfaces de algunas pantallas de nuestra a
 * [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/desarrollo_interfaces_2)
 * [Video](https://youtu.be/ZNs5IG_Efl0)
 
-## 
+## Procesamiento de imágenes básico
 
 * [Codigo](https://repl.it/@RafaelVillca/procesamientofirmas)
 * [Video](https://youtu.be/mTcDv-YoTrg)
