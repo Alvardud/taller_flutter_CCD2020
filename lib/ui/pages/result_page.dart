@@ -1,9 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:taller_flutter_ccd2020/controllers/loading_controller.dart';
+import 'package:taller_flutter_ccd2020/services/process_image_service.dart';
+import 'package:taller_flutter_ccd2020/services/web_services.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/loading_widget.dart';
 
 class ResultPage extends StatelessWidget {
   LoadingController _controller = LoadingController.instance;
+
+  File image;
+
+  ResultPage({this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +24,7 @@ class ResultPage extends StatelessWidget {
             middle: Text('Resultado'),
             leading: GestureDetector(
               onTap: () {
-                print('se presiono el boton');
+                Navigator.pop(context);
               },
               child: Icon(CupertinoIcons.back),
             ),
@@ -22,7 +32,7 @@ class ResultPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               SizedBox(height: 68),
-              Expanded(child: _Body()),
+              Expanded(child: _Body(image: image)),
             ],
           ),
         ),
@@ -38,29 +48,31 @@ class ResultPage extends StatelessWidget {
 }
 
 class _Body extends StatefulWidget {
+  File image;
+
+  _Body({this.image});
+
   @override
   __BodyState createState() => __BodyState();
 }
 
 class __BodyState extends State<_Body> {
-  String resultUrl;
+  Uint8List result;
 
-  Widget imageContainer(String url) {
+  Widget imageContainer(Uint8List image) {
     return Container(
       height: 300.0,
       width: 300.0,
       decoration: BoxDecoration(
-          color: CupertinoColors.white,
           borderRadius: BorderRadius.circular(16.0),
-          image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(url))),
+          image: DecorationImage(fit: BoxFit.cover, image: MemoryImage(image))),
     );
   }
 
   Widget imageResultContainer() {
     return Column(
       children: <Widget>[
-        imageContainer(
-            "https://sumedico.blob.core.windows.net/images/2020/03/17/cuidadosgatobebe_2-focus-min0.07-0.45-983-557.jpg"),
+        imageContainer(result),
         SizedBox(height: 16.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +98,6 @@ class __BodyState extends State<_Body> {
   @override
   void initState() {
     super.initState();
-    resultUrl = "";
   }
 
   @override
@@ -99,24 +110,41 @@ class __BodyState extends State<_Body> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              imageContainer(
-                  "https://www.purina-latam.com/sites/g/files/auxxlc391/files/styles/facebook_share/public/Que_debes_saber_antes_de_adoptar_un_gatito.jpg?itok=btO4gas0"),
+              imageContainer(widget.image.readAsBytesSync()),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: CupertinoButton(
-                  onPressed: ()async {
+                  onPressed: () async {
                     LoadingController.instance.loading();
                     LoadingController.instance.changeText('Procesando imagen');
-                    await Future.delayed(Duration(seconds: 2),(){});
-                    setState(() {
-                      resultUrl = "imagen con resultado";
-                    });
+                    await Future.delayed(Duration(seconds: 2), () {});
+                    setState(() {});
                     LoadingController.instance.close();
                   },
-                  child: Text('Aplicar Filtro'),
+                  child: GestureDetector(
+                    onTap: () async {
+                      LoadingController.instance.loading();
+                      /*Uint8List decode = await widget.image.readAsBytes();
+                      final imgb64 = base64Encode(decode);
+                      String resultService = await convertPhoto(imgb64);
+                      decode = base64Decode(resultService);*/
+
+                      Uint8List decode =
+                          await processImage(await widget.image.readAsBytes());
+
+                      LoadingController.instance.close();
+                      setState(() {
+                        result = decode;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Aplicar Filtro'),
+                    ),
+                  ),
                 ),
               ),
-              resultUrl == "" ? Container() : imageResultContainer()
+              result == null ? Container() : imageResultContainer()
             ],
           ),
         ));

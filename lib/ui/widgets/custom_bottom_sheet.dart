@@ -1,9 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final Function close;
-  CustomBottomSheet({this.close});
+  final Uint8List image;
+
+  CustomBottomSheet({this.close, this.image});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,16 +39,16 @@ class CustomBottomSheet extends StatelessWidget {
           ),
           Expanded(
             child: Center(
-              child: Container(
-                height: 250.0,
-                width: 250.0,
-                decoration: BoxDecoration(
-                    color: CupertinoColors.white,
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            "https://sumedico.blob.core.windows.net/images/2020/03/17/cuidadosgatobebe_2-focus-min0.07-0.45-983-557.jpg"),
-                        fit: BoxFit.cover)),
-              ),
+              child: image != null
+                  ? Container(
+                      height: 250.0,
+                      width: 250.0,
+                      decoration: BoxDecoration(
+                          color: CupertinoColors.white,
+                          image: DecorationImage(
+                              image: MemoryImage(image), fit: BoxFit.cover)),
+                    )
+                  : Container(),
             ),
           ),
           CupertinoTabBar(

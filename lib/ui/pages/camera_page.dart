@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:taller_flutter_ccd2020/controllers/custom_bottom_sheet_controller.dart';
 import 'package:taller_flutter_ccd2020/controllers/loading_controller.dart';
+import 'package:taller_flutter_ccd2020/services/process_image_service.dart';
+import 'package:taller_flutter_ccd2020/ui/pages/result_page.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/custom_bottom_sheet.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/loading_widget.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/marker_canvas.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -20,6 +26,8 @@ class _CameraPageState extends State<CameraPage>
   CameraController _cameraController;
   LoadingController _controller = LoadingController.instance;
   CustomBottomSheetController _customBottomSheetController;
+
+  Uint8List result;
 
   @override
   void initState() {
@@ -70,8 +78,20 @@ class _CameraPageState extends State<CameraPage>
   Widget ButtonCamera() {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          _customBottomSheetController.open();
+        onTap: () async {
+          final image = _customBottomSheetController.open();
+
+          final directory = await getExternalStorageDirectory();
+          final now = DateTime.now();
+
+          //TODO: change name
+          final nameDirectory = "${directory.path}";
+          //final nameDyrectory = "${directory.path}/Fotos";
+
+          await _cameraController
+              .takePicture("${directory.path}/${now.toString()}.png");
+
+          //await processImage();
         },
         child: Container(
           height: 60.0,
@@ -103,7 +123,15 @@ class _CameraPageState extends State<CameraPage>
             backgroundColor: Color(0x00000000),
             navigationBar: CupertinoNavigationBar(
               trailing: GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  File image =
+                      await ImagePicker.pickImage(source: ImageSource.gallery);
+
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => ResultPage(image: image)));
+                },
                 child: Text(
                   'Galeria',
                   style:
@@ -132,6 +160,7 @@ class _CameraPageState extends State<CameraPage>
                 MediaQuery.of(context).size.height -
                     (400 * _customBottomSheetController.value)),
             child: CustomBottomSheet(
+              image: result,
               close: () {
                 _customBottomSheetController.close();
               },
@@ -140,6 +169,14 @@ class _CameraPageState extends State<CameraPage>
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    _customBottomSheetController.dispose();
+
+    super.dispose();
   }
 }
 
