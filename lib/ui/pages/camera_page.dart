@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:taller_flutter_ccd2020/controllers/camera_controller_state.dart';
 import 'package:taller_flutter_ccd2020/controllers/custom_bottom_sheet_controller.dart';
 import 'package:taller_flutter_ccd2020/controllers/loading_controller.dart';
 import 'package:taller_flutter_ccd2020/services/process_image_service.dart';
+import 'package:taller_flutter_ccd2020/services/web_services.dart';
 import 'package:taller_flutter_ccd2020/ui/pages/result_page.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/custom_bottom_sheet.dart';
 import 'package:taller_flutter_ccd2020/ui/widgets/loading_widget.dart';
@@ -79,19 +82,24 @@ class _CameraPageState extends State<CameraPage>
     return Center(
       child: GestureDetector(
         onTap: () async {
-          final image = _customBottomSheetController.open();
-
+          _controller.loading();
           final directory = await getExternalStorageDirectory();
           final now = DateTime.now();
-
-          //TODO: change name
-          final nameDirectory = "${directory.path}";
-          //final nameDyrectory = "${directory.path}/Fotos";
-
           await _cameraController
               .takePicture("${directory.path}/${now.toString()}.png");
 
-          //await processImage();
+          File file = File("${directory.path}/${now.toString()}.png");
+
+          Uint8List convert = await file.readAsBytes();
+          Uint8List imageProcess =
+              base64Decode(await convertPhoto(base64Encode(convert)));
+
+          _controller.close();
+          setState(() {
+            result = imageProcess;
+          });
+
+          _customBottomSheetController.open();
         },
         child: Container(
           height: 60.0,
@@ -113,61 +121,74 @@ class _CameraPageState extends State<CameraPage>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: <Widget>[
-          CameraPreview(_cameraController),
-          CupertinoPageScaffold(
-            backgroundColor: Color(0x00000000),
-            navigationBar: CupertinoNavigationBar(
-              trailing: GestureDetector(
-                onTap: () async {
-                  File image =
-                      await ImagePicker.pickImage(source: ImageSource.gallery);
+    return ValueListenableBuilder(
+      valueListenable: CameraControllerState.instance.cameraActive,
+      builder: (context, value, child) {
+        return value
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Stack(
+                  children: <Widget>[
+                    CameraPreview(_cameraController),
+                    CupertinoPageScaffold(
+                      backgroundColor: Color(0x00000000),
+                      navigationBar: CupertinoNavigationBar(
+                        trailing: GestureDetector(
+                          onTap: () async {
+                            CameraControllerState.instance.pauseCamera();
+                            File image = await ImagePicker.pickImage(
+                                source: ImageSource.gallery);
 
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (context) => ResultPage(image: image)));
-                },
-                child: Text(
-                  'Galeria',
-                  style:
-                      TextStyle(color: CupertinoTheme.of(context).primaryColor),
+                            if (image != null) {
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) =>
+                                          ResultPage(image: image)));
+                            } else {
+                              CameraControllerState.instance.activeCamera();
+                            }
+                          },
+                          child: Text(
+                            'Galeria',
+                            style: TextStyle(
+                                color: CupertinoTheme.of(context).primaryColor),
+                          ),
+                        ),
+                        middle: Text('Captura una fotografía'),
+                      ),
+                      child: SafeArea(
+                          child: Column(
+                        children: <Widget>[
+                          Flexible(flex: 3, child: CameraMarkers()),
+                          Flexible(flex: 1, child: ButtonCamera())
+                        ],
+                      )),
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: _controller.isLoading,
+                      builder: (context, value, child) {
+                        return value ? LoadingWidget() : Container();
+                      },
+                    ),
+                    Transform.translate(
+                      offset: Offset(
+                          0.0,
+                          MediaQuery.of(context).size.height -
+                              (400 * _customBottomSheetController.value)),
+                      child: CustomBottomSheet(
+                        image: result,
+                        close: () {
+                          _customBottomSheetController.close();
+                        },
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              middle: Text('Captura una fotografía'),
-            ),
-            child: SafeArea(
-                child: Column(
-              children: <Widget>[
-                Flexible(flex: 3, child: CameraMarkers()),
-                Flexible(flex: 1, child: ButtonCamera())
-              ],
-            )),
-          ),
-          ValueListenableBuilder(
-            valueListenable: _controller.isLoading,
-            builder: (context, value, child) {
-              return value ? LoadingWidget() : Container();
-            },
-          ),
-          Transform.translate(
-            offset: Offset(
-                0.0,
-                MediaQuery.of(context).size.height -
-                    (400 * _customBottomSheetController.value)),
-            child: CustomBottomSheet(
-              image: result,
-              close: () {
-                _customBottomSheetController.close();
-              },
-            ),
-          )
-        ],
-      ),
+              )
+            : Container();
+      },
     );
   }
 

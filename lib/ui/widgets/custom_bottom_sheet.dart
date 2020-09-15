@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final Function close;
@@ -44,7 +47,6 @@ class CustomBottomSheet extends StatelessWidget {
                       height: 250.0,
                       width: 250.0,
                       decoration: BoxDecoration(
-                          color: CupertinoColors.white,
                           image: DecorationImage(
                               image: MemoryImage(image), fit: BoxFit.cover)),
                     )
@@ -52,8 +54,34 @@ class CustomBottomSheet extends StatelessWidget {
             ),
           ),
           CupertinoTabBar(
-            onTap: (int value) {
-              //logica descarga y compartir
+            onTap: (int value)async {
+              DateTime now = DateTime.now();
+              if(value==0){
+                //final directory = await DownloadsPathProvider.downloadsDirectory;
+                final directory = await getExternalStorageDirectory();
+                print(directory.path);
+                File file = File("${directory.path}/${now.toString()}-firma.png");
+                await file.writeAsBytes(image);
+                showCupertinoDialog(context: context, builder: (context){
+                  return CupertinoAlertDialog(
+                    title: Text('Descarga Completa'),
+                    content: Text('Se descargo la imagen de forma satisfactoria'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        child: Text('Aceptar'),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }else{
+                final directory = await getExternalStorageDirectory();
+                File file = File("${directory.path}/${now.toString()}-firma.png");
+                await file.writeAsBytes(image);
+                Share.shareFiles(["${directory.path}/${now.toString()}-firma.png"]);
+              }
             },
             items: [
               BottomNavigationBarItem(

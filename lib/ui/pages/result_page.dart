@@ -3,6 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
+import 'package:taller_flutter_ccd2020/controllers/camera_controller_state.dart';
 import 'package:taller_flutter_ccd2020/controllers/loading_controller.dart';
 import 'package:taller_flutter_ccd2020/services/process_image_service.dart';
 import 'package:taller_flutter_ccd2020/services/web_services.dart';
@@ -25,6 +28,7 @@ class ResultPage extends StatelessWidget {
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
+                CameraControllerState.instance.activeCamera();
               },
               child: Icon(CupertinoIcons.back),
             ),
@@ -58,6 +62,7 @@ class _Body extends StatefulWidget {
 
 class __BodyState extends State<_Body> {
   Uint8List result;
+  DateTime now;
 
   Widget imageContainer(Uint8List image) {
     return Container(
@@ -83,11 +88,35 @@ class __BodyState extends State<_Body> {
                 'Descargar',
                 style: TextStyle(color: CupertinoColors.white),
               ),
-              onPressed: () {},
+              onPressed: () async{
+                final directory = await getExternalStorageDirectory();
+                print(directory.path);
+                File file = File("${directory.path}/${now.toString()}-firma.png");
+                await file.writeAsBytes(result);
+                showCupertinoDialog(context: context, builder: (context){
+                  return CupertinoAlertDialog(
+                    title: Text('Descarga Completa'),
+                    content: Text('Se descargo la imagen de forma satisfactoria'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        child: Text('Aceptar'),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              },
             ),
             CupertinoButton(
               child: Text('Compartir'),
-              onPressed: () {},
+              onPressed: () async{
+                final directory = await getExternalStorageDirectory();
+                File file = File("${directory.path}/${now.toString()}-firma.png");
+                await file.writeAsBytes(result);
+                Share.shareFiles(["${directory.path}/${now.toString()}-firma.png"]);
+              },
             )
           ],
         )
@@ -131,11 +160,13 @@ class __BodyState extends State<_Body> {
 
                       Uint8List decode =
                           await processImage(await widget.image.readAsBytes());
+                      now = DateTime.now();
 
                       LoadingController.instance.close();
                       setState(() {
                         result = decode;
                       });
+
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
