@@ -51,5 +51,11 @@ En esta seccion desarrollaremos las interfaces de algunas pantallas de nuestra a
 
 ## Procesamiento de imágenes en la app movil
 
-* [Codigo]()
+* [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/procesamiento_imagenes)
+* [Video](https://www.youtube.com/watch?v=nceoyPC_DLk)
+
+## Administracion archivos
+
+* [Codigo](https://github.com/Alvardud/taller_flutter_CCD2020/tree/administracion_archivos)
 * [Video]()
+
